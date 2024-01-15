@@ -1,0 +1,31 @@
+{
+  "mappings": {
+    "properties": {
+      "$schema": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "created": {
+        "type": "date"
+      },
+      "updated": {
+        "type": "date"
+      },
+      "indexed_at": {
+        "type": "date"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "version_id": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "keyword"
+      }
+    }
+  }
+}
