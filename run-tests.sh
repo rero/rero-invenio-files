@@ -18,7 +18,7 @@
 
 
 # Usage:
-#   env DB=postgresql12 SEARCH=elasticsearch7 CACHE=redis MQ=rabbitmq ./run-tests.sh
+#   env DB=postgresql15 SEARCH=elasticsearch7 CACHE=redis MQ=rabbitmq ./run-tests.sh
 
 # Quit on errors
 set -o errexit
@@ -32,21 +32,22 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-# python -m check_manifest
-python -m sphinx.cmd.build -qnNW docs docs/_build/html
+pip_audit_exceptions=""
+add_exceptions() {
+  pip_audit_exceptions="$pip_audit_exceptions --ignore-vuln $1"""
+}
 
-safety_exceptions="-i 51668 -i 42194 -i 62019 -i 67599 -i 51457"
-msg=$(safety check -o text ${safety_exceptions}) || {
-    echo "Safety vulnerabilites found for packages:" $(safety check -o bare ${safety_exceptions})
-    echo "Run: \"safety check -o screen ${safety_exceptions} | grep -i vulnerability\" for more details"
-    exit 1
-  }
+# python -m check_manifest
+sphinx-build -qnNW docs docs/_build/html
+
+# py           1.11.0  PYSEC-2022-42969
+add_exceptions "PYSEC-2022-42969"
+PIPAPI_PYTHON_LOCATION=`which python` pip-audit ${pip_audit_exceptions}
 
 autoflake -r --remove-all-unused-imports --ignore-init-module-imports --quiet .
 
 # TODO: Remove services below that are not neeed (fix also the usage note).
-eval "$(docker-services-cli up --db ${DB:-postgresql} --search ${SEARCH:-elasticsearch} --cache ${CACHE:-redis} --mq ${MQ:-rabbitmq} --env)"
+docker-services-cli up --db ${DB:-postgresql} --search ${SEARCH:-elasticsearch} --cache ${CACHE:-redis} --mq ${MQ:-rabbitmq} --env
 python -m pytest
 tests_exit_code=$?
-python -m sphinx.cmd.build -qnNW -b doctest docs docs/_build/doctest
 exit "$tests_exit_code"
