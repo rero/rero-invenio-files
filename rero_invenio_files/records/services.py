@@ -27,6 +27,7 @@ from invenio_records_resources.services import (
 )
 from invenio_records_resources.services.files.links import FileLink
 from invenio_records_resources.services.records.components import FilesComponent
+from invenio_records_resources.services.records.links import RecordEndpointLink
 
 from .api import RecordWithFile
 from .components import ThumbnailAndFulltextComponent
@@ -75,6 +76,9 @@ class RecordServiceConfig(BaseRecordServiceConfig):
     record_cls = RecordWithFile
     # marshmallow schema
     schema = RecordSchema
+    links_item = {
+        "self": RecordEndpointLink("records.read"),
+    }
     service_id = "records"
 
 

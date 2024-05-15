@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-name: CI
+name: build
 
 on:
   push:
@@ -28,25 +28,25 @@ on:
       - staging
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron: "0 3 * * 6"
+    - cron: '0 3 * * 6'
   workflow_dispatch:
     inputs:
       reason:
-        description: "Reason"
+        description: 'Reason'
         required: false
-        default: "Manual trigger"
+        default: 'Manual trigger'
 
 jobs:
-  Tests:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         # TODO: You can add/remove combinations e.g. `dev` requirements or
-        # `postgresql13` by adding a new item to the following lists.
+        # `postgresql15` by adding a new item to the following lists.
         # You can see the complete list of services and versions that are available at:
         # https://docker-services-cli.readthedocs.io/en/latest/configuration.html
-        python-version: ["3.9"]
-        db-service: [postgresql13]
+        python-version: ['3.12']
+        db-service: [postgresql15]
         search-service: [elasticsearch]
         dependencies: ['dev', 'deploy']
 
@@ -56,27 +56,28 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
-      - name: Update depencencies
-        if: ${{ matrix.dependencies == 'dev' }}
-        run: poetry update
-
       - name: Install dependencies
         run: |
           poetry install
+
+      - name: Update depencencies
+        if: ${{ matrix.dependencies == 'dev' }}
+        run: poetry update
 
       - name: Run tests
         run: |
           poetry run ./run-tests.sh
 
       - name: Test publish in dry run mode
+        if: ${{ matrix.dependencies == 'deploy' }} and ${{ matrix.python-version == '3.12' }}
         run: poetry publish --build --dry-run

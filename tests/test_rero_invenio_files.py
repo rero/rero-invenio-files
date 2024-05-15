@@ -45,7 +45,7 @@ def test_init():
     assert "rero-invenio-files" in app.extensions
 
 
-def test_files_api_flow(client, headers, file_location, pdf_file):
+def test_files_api_flow(app, client, headers, file_location, pdf_file):
     """Test record creation."""
     # Initialize a draft
     data = dict(
@@ -66,9 +66,7 @@ def test_files_api_flow(client, headers, file_location, pdf_file):
     res = client.post(
         f"/api/records/{id_}/files",
         headers=headers,
-        json=[
-            {"key": "test.pdf", "label": "label1"},
-        ],
+        json=[{"key": "test.pdf", "metadata": {"label": "label1"}}],
     )
     assert res.status_code == 201
     res_file = res.json["entries"][0]
@@ -114,7 +112,7 @@ def test_files_api_flow(client, headers, file_location, pdf_file):
     assert res.json["key"] == "test.pdf"
     assert res.json["status"] == "completed"
     assert res.json["metadata"] == {"label": "label1"}
-    file_size = str(res.json["size"])
+    # file_size = str(res.json["size"])
     assert set(res.json["links"].keys()) == {
         "self",
         "content",
@@ -136,7 +134,7 @@ def test_files_api_flow(client, headers, file_location, pdf_file):
     # Test preview
     # Note: url_for works only on the top of the test
     with mock.patch("invenio_theme.views.render_template"):
-        res = client.get(f"/records/foo/preview/test.pdf", headers=headers)
+        res = client.get("/records/foo/preview/test.pdf", headers=headers)
         assert res.status_code == 404
         res = client.get(f"/records/{id_}/preview/test1.pdf", headers=headers)
         assert res.status_code == 404
@@ -152,7 +150,7 @@ def test_files_api_flow(client, headers, file_location, pdf_file):
     res = client.put(
         f"/api/records/{id_}/files/test.pdf",
         headers=headers,
-        json={"title": "New title"},
+        json={"metadata": {"title": "New title"}},
     )
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"

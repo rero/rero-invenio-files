@@ -95,6 +95,7 @@ def file_location(database):
 def app_config(app_config):
     """Application config override."""
     # TODO: Override any necessary config values for tests
+    app_config["THEME_FRONTPAGE"] = False
     app_config["RERO_FILES_DEFAULT_VALUE"] = "test-foobar"
     app_config["FILES_REST_STORAGE_CLASS_LIST"] = {
         "L": "Local",
