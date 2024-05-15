@@ -89,3 +89,27 @@ class REROInvenioFiles(object):
         for k in dir(config):
             if k.startswith("RERO_FILES_"):
                 app.config.setdefault(k, getattr(config, k))
+
+
+def finalize_app(app):
+    """Finalize app."""
+    # Invenio-Records-Resources
+    init(app)
+
+
+def api_finalize_app(app):
+    """Finalize app for api."""
+    init(app)
+
+
+def init(app):
+    """Init app."""
+    # Register services - cannot be done in extension because
+    # Invenio-Records-Resources might not have been initialized.
+    sregistry = app.extensions["invenio-records-resources"].registry
+    ext = app.extensions["rero-invenio-files"]
+    sregistry.register(ext.records_service, service_id="records")
+    sregistry.register(ext.records_files_service, service_id="records-files")
+    # Register indexers
+    iregistry = app.extensions["invenio-indexer"].registry
+    iregistry.register(ext.records_service.indexer, indexer_id="records")

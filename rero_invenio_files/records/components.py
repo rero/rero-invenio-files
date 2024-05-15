@@ -119,14 +119,16 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         with contextlib.suppress(Exception):
             if blob := self.create_thumbnail_from_file(rfile.uri, rfile.mimetype):
                 thumb_name = self.change_filename_extension(file_key, "jpg")
-                sf.init_files(
+                result = sf.init_files(
                     identity=identity,
                     id_=recid,
                     data=[
                         {
                             "key": thumb_name,
-                            "type": "thumbnail",
-                            "thumbnail_for": file_key,
+                            "metadata": {
+                                "type": "thumbnail",
+                                "thumbnail_for": file_key,
+                            },
                         }
                     ],
                     uow=self.uow,
@@ -151,8 +153,10 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
                     data=[
                         {
                             "key": thumb_name,
-                            "type": "fulltext",
-                            "fulltext_for": file_key,
+                            "metadata": {
+                                "type": "fulltext",
+                                "fulltext_for": file_key,
+                            },
                         }
                     ],
                     uow=self.uow,

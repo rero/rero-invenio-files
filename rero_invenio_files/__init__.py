@@ -17,7 +17,7 @@
 
 """Files support for the RERO invenio instances."""
 
-from .ext import REROInvenioFiles
+from rero_invenio_files.ext import REROInvenioFiles
 
 __version__ = "0.1.0"
 
