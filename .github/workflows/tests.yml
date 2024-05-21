@@ -25,7 +25,7 @@ on:
   pull_request:
     branches:
       - main
-      - "staging"
+      - staging
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: "0 3 * * 6"
@@ -78,5 +78,5 @@ jobs:
         run: |
           poetry run ./run-tests.sh
 
-      - name: Run build
-        run: poetry build
+      - name: Test publish in dry run mode
+        run: poetry publish --build --dry-run
