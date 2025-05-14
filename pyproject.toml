@@ -4,7 +4,7 @@ version = "1.1.0"
 description = "Files support for the RERO invenio instances."
 authors = [{name = "RERO",email = "software@rero.ch"}]
 license = "GNU Affero General Public License v3.0"
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.9.2, <3.13"
 
 
