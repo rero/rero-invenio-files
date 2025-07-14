@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -53,15 +51,9 @@ class ThumbFileLink(PreviewFileLink):
     """Add the thumbnail file name variable to generate the thumbnail links."""
 
     @staticmethod
-    def vars(file_record, vars):
+    def vars(file_record, variables):
         """Variables for the URI template."""
-        vars.update(
-            {
-                "thumb": ThumbnailAndFulltextComponent.change_filename_extension(
-                    file_record.key, "jpg"
-                )
-            }
-        )
+        variables.update({"thumb": ThumbnailAndFulltextComponent.change_filename_extension(file_record.key, "jpg")})
 
 
 class RecordServiceConfig(BaseRecordServiceConfig):
@@ -99,7 +91,8 @@ class FileServiceConfig(BaseFileServiceConfig):
     }
     service_id = "records-files"
     # component processors
-    components = BaseFileServiceConfig.components + [
+    components = [
+        *BaseFileServiceConfig.components,
         FilesComponent,
         ThumbnailAndFulltextComponent,
     ]

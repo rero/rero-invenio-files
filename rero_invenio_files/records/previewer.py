@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -41,7 +39,7 @@ class PreviewFile(PreviewFileBase):
             The URI generation assumes that you can download the file using the
             view ``invenio_records_ui.<pid_type>_files``.
         """
-        return f"/api/records/{self.pid.pid_value}/" f"files/{self.file.key}/content"
+        return f"/api/records/{self.pid.pid_value}/files/{self.file.key}/content"
 
 
 def preview(pid, record, template=None, **kwargs):
@@ -74,9 +72,7 @@ def preview(pid, record, template=None, **kwargs):
 
     # Find a suitable previewer
     fileobj = PreviewFile(pid, record, fileobj)
-    for plugin in current_previewer.iter_previewers(
-        previewers=[file_previewer] if file_previewer else None
-    ):
+    for plugin in current_previewer.iter_previewers(previewers=[file_previewer] if file_previewer else None):
         if plugin.can_preview(fileobj):
             try:
                 return plugin.preview(fileobj)

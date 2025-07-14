@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -24,7 +22,7 @@ from .records.resources import FileResource, RecordResource
 from .records.services import RecordFileService, RecordService
 
 
-class REROInvenioFiles(object):
+class REROInvenioFiles:
     """RERO-Invenio-Files extension."""
 
     def __init__(self, app=None):
@@ -40,28 +38,20 @@ class REROInvenioFiles(object):
         self.init_resources(app)
 
     def service_configs(self, app):
-        """Custom service configs."""
+        """Return custom service configs."""
 
         class ServiceConfigs:
-            records = obj_or_import_string(
-                app.config["RERO_FILES_RECORD_SERVICE_CONFIG"]
-            )
-            records_files = obj_or_import_string(
-                app.config["RERO_FILES_RECORD_FILE_SERVICE_CONFIG"]
-            )
+            records = obj_or_import_string(app.config["RERO_FILES_RECORD_SERVICE_CONFIG"])
+            records_files = obj_or_import_string(app.config["RERO_FILES_RECORD_FILE_SERVICE_CONFIG"])
 
         return ServiceConfigs
 
     def resource_configs(self, app):
-        """Custom resource configs."""
+        """Return custom resource configs."""
 
         class ResourceConfigs:
-            records = obj_or_import_string(
-                app.config["RERO_FILES_RECORD_RESOURCE_CONFIG"]
-            )
-            records_files = obj_or_import_string(
-                app.config["RERO_FILES_RECORD_FILE_RESOURCE_CONFIG"]
-            )
+            records = obj_or_import_string(app.config["RERO_FILES_RECORD_RESOURCE_CONFIG"])
+            records_files = obj_or_import_string(app.config["RERO_FILES_RECORD_FILE_RESOURCE_CONFIG"])
 
         return ResourceConfigs
 
@@ -69,9 +59,7 @@ class REROInvenioFiles(object):
         """Initialize services."""
         service_configs = self.service_configs(app)
         self.records_service = RecordService(config=service_configs.records)
-        self.records_files_service = RecordFileService(
-            config=service_configs.records_files
-        )
+        self.records_files_service = RecordFileService(config=service_configs.records_files)
 
     def init_resources(self, app):
         """Initialize resources."""

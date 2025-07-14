@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -30,18 +28,18 @@ from rero_invenio_files.pdf import PDFGenerator
 
 @pytest.fixture(scope="module")
 def simple_data():
-    """Simple document data for pdf generation."""
-    yield dict(
-        header="Document pid: 1234",
-        title="Simple Title",
-        authors=["Author1, Author2"],
-        summary="""The year 1866 was marked by a bizarre development, an unexplained and downright inexplicable phenomenon that surely no one has forgotten. Without getting into those rumors that upset civilians in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed. Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.""",
-    )
+    """Return a simple document data for pdf generation."""
+    yield {
+        "header": "Document pid: 1234",
+        "title": "Simple Title",
+        "authors": ["Author1, Author2"],
+        "summary": """The year 1866 was marked by a bizarre development, an unexplained and downright inexplicable phenomenon that surely no one has forgotten. Without getting into those rumors that upset civilians in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed. Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.""",
+    }
 
 
 @pytest.fixture(scope="module")
 def pdf_file(simple_data):
-    """Simple pdf file."""
+    """Return a simple pdf file."""
     pdf = PDFGenerator(simple_data)
     pdf.render()
     return pdf.output()
@@ -49,7 +47,7 @@ def pdf_file(simple_data):
 
 @pytest.fixture(scope="module")
 def headers():
-    """Default headers for making requests."""
+    """Return default headers for making requests."""
     return {
         "content-type": "application/json",
         "accept": "application/json",
@@ -66,7 +64,7 @@ def input_data():
 
 @pytest.yield_fixture(scope="module")
 def file_location(database):
-    """Creates a simple default location for a test.
+    """Create a simple default location for a test.
 
     Scope: function
 
@@ -104,26 +102,20 @@ def app_config(app_config):
     }
 
     app_config["FILES_REST_DEFAULT_STORAGE_CLASS"] = "L"
-    app_config["RECORDS_REFRESOLVER_CLS"] = (
-        "invenio_records.resolver.InvenioRefResolver"
-    )
-    app_config["RECORDS_REFRESOLVER_STORE"] = (
-        "invenio_jsonschemas.proxies.current_refresolver_store"
-    )
+    app_config["RECORDS_REFRESOLVER_CLS"] = "invenio_records.resolver.InvenioRefResolver"
+    app_config["RECORDS_REFRESOLVER_STORE"] = "invenio_jsonschemas.proxies.current_refresolver_store"
     app_config["RERO_FILES_RECORD_SERVICE_CONFIG"] = MockRecordServiceConfig
     app_config["RERO_FILES_RECORD_FILE_SERVICE_CONFIG"] = MockFileServiceConfig
 
-    app_config["PREVIEWER_RECORD_FILE_FACOTRY"] = (
-        "rero_invenio_files.records.previewer.record_file_factory"
-    )
+    app_config["PREVIEWER_RECORD_FILE_FACOTRY"] = "rero_invenio_files.records.previewer.record_file_factory"
 
     app_config["RECORDS_UI_ENDPOINTS"] = {
-        "recid_preview": dict(
-            pid_type="recid",
-            route="/records/<pid_value>/preview/<path:filename>",
-            view_imp="rero_invenio_files.records.previewer.preview",
-            record_class="rero_invenio_files.records.api:RecordWithFile",
-        )
+        "recid_preview": {
+            "pid_type": "recid",
+            "route": "/records/<pid_value>/preview/<path:filename>",
+            "view_imp": "rero_invenio_files.records.previewer.preview",
+            "record_class": "rero_invenio_files.records.api:RecordWithFile",
+        }
     }
     return app_config
 
