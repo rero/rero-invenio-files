@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -18,8 +16,8 @@
 """Module tests."""
 
 from io import BytesIO
+from unittest import mock
 
-import mock
 from flask import Flask
 
 from rero_invenio_files import REROInvenioFiles
@@ -48,11 +46,11 @@ def test_init():
 def test_files_api_flow(app, client, headers, file_location, pdf_file):
     """Test record creation."""
     # Initialize a draft
-    data = dict(
-        collections=["col1", "col2"],
+    data = {
+        "collections": ["col1", "col2"],
         # links=[{"$ref": "https://localhost:5000/api/records/1"}],
         # owner={"$ref": "https://localhost:5000/api/users/1"},
-    )
+    }
     res = client.post("/api/records", headers=headers, json={"metadata": data})
     assert res.status_code == 201
     id_ = res.json["id"]
@@ -74,12 +72,8 @@ def test_files_api_flow(app, client, headers, file_location, pdf_file):
     assert res_file["status"] == "pending"
     assert res_file["metadata"] == {"label": "label1"}
     assert res_file["links"]["self"].endswith(f"/api/records/{id_}/files/test.pdf")
-    assert res_file["links"]["content"].endswith(
-        f"/api/records/{id_}/files/test.pdf/content"
-    )
-    assert res_file["links"]["commit"].endswith(
-        f"/api/records/{id_}/files/test.pdf/commit"
-    )
+    assert res_file["links"]["content"].endswith(f"/api/records/{id_}/files/test.pdf/content")
+    assert res_file["links"]["commit"].endswith(f"/api/records/{id_}/files/test.pdf/commit")
 
     # Get the file metadata
 
@@ -161,11 +155,9 @@ def test_files_api_flow(app, client, headers, file_location, pdf_file):
     res = client.get(f"/api/records/{id_}/files", headers=headers)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 3
-    main_file = [
-        file
-        for file in res.json["entries"]
-        if file.get("metadata", {}).get("type") not in ["thumbnail", "fulltext"]
-    ][0]
+    main_file = next(
+        file for file in res.json["entries"] if file.get("metadata", {}).get("type") not in ["thumbnail", "fulltext"]
+    )
     assert main_file["key"] == "test.pdf"
     assert main_file["status"] == "completed"
     assert main_file["metadata"] == {"title": "New title"}

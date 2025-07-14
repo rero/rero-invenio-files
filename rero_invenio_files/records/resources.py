@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -16,7 +14,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """Files support for the RERO invenio instances."""
-
 
 from invenio_records_resources.resources import FileResource as BaseFileResource
 from invenio_records_resources.resources import (

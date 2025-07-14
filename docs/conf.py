@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -54,7 +52,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "RERO-Invenio-Files"
-copyright = "2024, RERO"
+copyright = "2024, RERO"  # noqa
 author = "RERO"
 
 # The version info for the project you're documenting, acts as replacement for

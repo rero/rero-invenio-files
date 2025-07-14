@@ -20,6 +20,6 @@ status](https://github.com/rero/rero-invenio-files/workflows/build/badge.svg)](h
 Number](https://img.shields.io/github/tag/rero/rero-invenio-files.svg)](https://github.com/rero/rero-invenio-files/releases/latest)
 [![Downloads](https://img.shields.io/pypi/dm/rero-invenio-files.svg)](https://pypi.python.org/pypi/rero-invenio-files)
 [![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0.html)
-[![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 
 Files support for the RERO invenio instances.

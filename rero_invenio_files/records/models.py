@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -16,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """Files support for the RERO invenio instances."""
+
 from invenio_db import db
 from invenio_files_rest.models import Bucket
 from invenio_records.models import RecordMetadataBase

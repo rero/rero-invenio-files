@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -61,7 +59,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         """
         # Thumbnail can only be done from images or PDFs.
         if not mimetype.startswith("image/") and mimetype != "application/pdf":
-            return
+            return None
 
         # For PDF, we take only the first page
         if mimetype == "application/pdf":
@@ -70,9 +68,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
             max_width = max_height = 200
             with fitz.open(file_path) as pdf_document:
                 page = pdf_document[0]
-                scale_factor = min(
-                    max_width / page.rect.width, max_height / page.rect.height
-                )
+                scale_factor = min(max_width / page.rect.width, max_height / page.rect.height)
                 pixmap = page.get_pixmap(matrix=fitz.Matrix(scale_factor, scale_factor))
                 return pixmap.tobytes(output="jpg", jpg_quality=95)
 
@@ -96,7 +92,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         :rtype: str
         """
         if mimetype != "application/pdf":
-            return
+            return None
         with fitz.open(file_path) as pdf_file:
             text = [page.get_text("text") for page in pdf_file]
             return "\n".join(text)
@@ -119,7 +115,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         with contextlib.suppress(Exception):
             if blob := self.create_thumbnail_from_file(rfile.uri, rfile.mimetype):
                 thumb_name = self.change_filename_extension(file_key, "jpg")
-                result = sf.init_files(
+                sf.init_files(
                     identity=identity,
                     id_=recid,
                     data=[
@@ -140,9 +136,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
                     stream=BytesIO(blob),
                     uow=self.uow,
                 )
-                sf.commit_file(
-                    identity=identity, id_=recid, file_key=thumb_name, uow=self.uow
-                )
+                sf.commit_file(identity=identity, id_=recid, file_key=thumb_name, uow=self.uow)
         # fulltext
         with contextlib.suppress(Exception):
             if fulltext := self.create_fulltext_from_file(rfile.uri, rfile.mimetype):
@@ -168,9 +162,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
                     stream=BytesIO(fulltext.encode()),
                     uow=self.uow,
                 )
-                sf.commit_file(
-                    identity=identity, id_=recid, file_key=thumb_name, uow=self.uow
-                )
+                sf.commit_file(identity=identity, id_=recid, file_key=thumb_name, uow=self.uow)
 
     def delete_file(self, identity, id_, file_key, record, deleted_file):
         """Delete file handler.
@@ -188,11 +180,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         recid = record.pid.pid_value
         thumb_name = self.change_filename_extension(file_key, "jpg")
         with contextlib.suppress(FileKeyNotFoundError):
-            sf.delete_file(
-                identity=identity, id_=recid, file_key=thumb_name, uow=self.uow
-            )
+            sf.delete_file(identity=identity, id_=recid, file_key=thumb_name, uow=self.uow)
         fulltext_name = self.change_filename_extension(file_key, "txt")
         with contextlib.suppress(FileKeyNotFoundError):
-            sf.delete_file(
-                identity=identity, id_=recid, file_key=fulltext_name, uow=self.uow
-            )
+            sf.delete_file(identity=identity, id_=recid, file_key=fulltext_name, uow=self.uow)

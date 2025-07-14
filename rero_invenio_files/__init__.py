@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -21,4 +19,4 @@ from rero_invenio_files.ext import REROInvenioFiles
 
 __version__ = "1.1.0"
 
-__all__ = ("__version__", "REROInvenioFiles")
+__all__ = ("REROInvenioFiles", "__version__")

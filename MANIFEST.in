@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # RERO-Invenio-Files
 # Copyright (C) 2024 RERO.
 #
@@ -25,7 +23,6 @@
 
 include .dockerignore
 include .editorconfig
-include .tx/config
 prune docs/_build
 recursive-include .github/workflows *.yml
 recursive-include rero_invenio_files/translations *.po *.pot *.mo
