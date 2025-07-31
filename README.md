@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <!-- PROJECT SHIELDS -->
 [![Github actions
-status](https://github.com/rero/rero-invenio-files/workflows/build/badge.svg)](https://github.com/rero/rero-invenio-files/actions?query=workflow%3Abuild)
+status](https://github.com/rero/rero-invenio-files/actions/workflows/continuous-integration-test.yml/badge.svg)](https://github.com/rero/rero-invenio-files/actions/workflows/continuous-integration-test.yml)
 [![Release
 Number](https://img.shields.io/github/tag/rero/rero-invenio-files.svg)](https://github.com/rero/rero-invenio-files/releases/latest)
 [![Downloads](https://img.shields.io/pypi/dm/rero-invenio-files.svg)](https://pypi.python.org/pypi/rero-invenio-files)
