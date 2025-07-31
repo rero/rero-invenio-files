@@ -1,6 +1,6 @@
 [project]
 name = "rero-invenio-files"
-version = "1.1.0"
+version = "1.1.1"
 description = "Files support for the RERO invenio instances."
 authors = [{name = "RERO",email = "software@rero.ch"}]
 license = "AGPL-3.0"
