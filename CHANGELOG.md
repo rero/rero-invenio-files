@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.1.2](https://github.com/rero/rero-invenio-files/tree/v1.1.1) (2025-08-04)
+
+[Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.1...v1.1.2)
+
+- chore: fix the wrong package publication on pypi for v1.1.1
+
 ## [v1.1.1](https://github.com/rero/rero-invenio-files/tree/v1.1.1) (2025-07-31)
 
 [Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.0...v1.1.1)
