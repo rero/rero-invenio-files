@@ -1,10 +1,16 @@
 # Changelog
 
-## [v1.1.2](https://github.com/rero/rero-invenio-files/tree/v1.1.1) (2025-08-04)
+## [v1.1.3](https://github.com/rero/rero-invenio-files/tree/v1.1.3) (2025-08-05)
+
+[Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.2...v1.1.3)
+
+- chore: use uv_publish as a build system (by @PascalRepond)
+
+## [v1.1.2](https://github.com/rero/rero-invenio-files/tree/v1.1.2) (2025-08-04)
 
 [Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.1...v1.1.2)
 
-- chore: fix the wrong package publication on pypi for v1.1.1
+- chore: fix the wrong package publication on pypi for v1.1.1 (by @PascalRepond)
 
 ## [v1.1.1](https://github.com/rero/rero-invenio-files/tree/v1.1.1) (2025-07-31)
 

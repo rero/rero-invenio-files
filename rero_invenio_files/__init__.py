@@ -17,6 +17,6 @@
 
 from rero_invenio_files.ext import REROInvenioFiles
 
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 
 __all__ = ("REROInvenioFiles", "__version__")
