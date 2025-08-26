@@ -62,7 +62,7 @@ def input_data():
     }
 
 
-@pytest.yield_fixture(scope="module")
+@pytest.fixture(scope="module")
 def file_location(database):
     """Create a simple default location for a test.
 
