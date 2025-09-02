@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.9.2, <3.13"
 resolution-markers = [
     "python_full_version >= '3.11'",
@@ -3277,7 +3277,7 @@ wheels = [
 
 [[package]]
 name = "rero-invenio-files"
-version = "1.1.3"
+version = "1.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "fpdf2" },

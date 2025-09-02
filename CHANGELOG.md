@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.0](https://github.com/rero/rero-invenio-files/tree/v1.2.0) (2025-09-02)
+
+[Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.3...v1.2.0)
+
+**New features:**
+
+- feat (pdf): improve PDFGenerator with better layout and image handling [#12](https://github.com/rero/rero-invenio-files/pull/12) (by @NathanPython2002)
+
 ## [v1.1.3](https://github.com/rero/rero-invenio-files/tree/v1.1.3) (2025-08-05)
 
 [Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.2...v1.1.3)
