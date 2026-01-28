@@ -15,6 +15,7 @@
 
 """Files support for the RERO invenio instances."""
 
+from flask import make_response
 from invenio_records_resources.resources import FileResource as BaseFileResource
 from invenio_records_resources.resources import (
     FileResourceConfig as BaseFileResourceConfig,
@@ -45,3 +46,18 @@ class FileResourceConfig(BaseFileResourceConfig):
 
 class FileResource(BaseFileResource):
     """Record file resource."""
+
+    def read_file_content(self):
+        """Read file content and set proper Content-Disposition header."""
+        # Get the response from the base class
+        response = super().read_file_content()
+
+        # Get the file key from the request
+        file_key = self.resource_requestctx.route["key"]
+
+        # Always set Content-Disposition header with the actual filename
+        # This ensures downloads use the correct filename instead of "contents"
+        # or generic names for non-PDF files
+        response.headers["Content-Disposition"] = f'attachment; filename="{file_key}"'
+
+        return response

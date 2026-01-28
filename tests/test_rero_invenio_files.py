@@ -170,3 +170,42 @@ def test_files_api_flow(app, client, headers, file_location, pdf_file):
     res = client.get(f"/api/records/{id_}/files", headers=headers)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 0
+
+
+def test_file_download_content_disposition(app, client, headers, file_location, pdf_file):
+    """Test that Content-Disposition header is set correctly for file downloads."""
+    # Create a record
+    data = {"collections": ["test"]}
+    res = client.post("/api/records", headers=headers, json={"metadata": data})
+    assert res.status_code == 201
+    id_ = res.json["id"]
+
+    # Test with PDF file
+    res = client.post(
+        f"/api/records/{id_}/files",
+        headers=headers,
+        json=[{"key": "document.pdf", "metadata": {}}],
+    )
+    assert res.status_code == 201
+
+    res = client.put(
+        f"/api/records/{id_}/files/document.pdf/content",
+        headers={
+            "content-type": "application/octet-stream",
+            "accept": "application/json",
+        },
+        data=BytesIO(pdf_file),
+    )
+    assert res.status_code == 200
+
+    res = client.post(f"/api/records/{id_}/files/document.pdf/commit", headers=headers)
+    assert res.status_code == 200
+
+    # Download PDF and check Content-Disposition header
+    res = client.get(f"/api/records/{id_}/files/document.pdf/content")
+    assert res.status_code == 200
+    assert "Content-Disposition" in res.headers
+    # Check that the filename is present in the header
+    content_disp = res.headers["Content-Disposition"]
+    assert "document.pdf" in content_disp, f"Expected 'document.pdf' in '{content_disp}'"
+    assert "attachment" in content_disp, f"Expected 'attachment' in '{content_disp}'"
