@@ -18,6 +18,8 @@ dependencies = [
     "invenio-previewer",
     "invenio-theme",
     "poethepoet>=0.36.0",
+    # problems pkg_resources, removed in setuptools 82
+    "setuptools (<82)",
 ]
 
 [dependency-groups]
@@ -65,6 +67,9 @@ line-length = 120
 [tool.ruff.lint]
 extend-select = ["A", "C4", "DTZ", "INT", "ISC", "T20", "PIE", "Q", "RET", "SIM", "I", "N", "PERF", "W", "D", "F", "UP", "RUF"]
 ignore = ["RUF012"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ARG001"]  # Ignore unused function arguments in tests (pytest fixtures)
 
 [tool.ruff.lint.pydocstyle]
 convention = "pep257"

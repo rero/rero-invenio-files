@@ -15,7 +15,8 @@
 
 """Files support for the RERO invenio instances."""
 
-from flask import make_response
+from urllib.parse import quote
+
 from invenio_records_resources.resources import FileResource as BaseFileResource
 from invenio_records_resources.resources import (
     FileResourceConfig as BaseFileResourceConfig,
@@ -24,6 +25,7 @@ from invenio_records_resources.resources import RecordResource as BaseRecordReso
 from invenio_records_resources.resources import (
     RecordResourceConfig as BaseRecordResourceConfig,
 )
+from invenio_records_resources.resources.files.resource import resource_requestctx
 
 
 class RecordResourceConfig(BaseRecordResourceConfig):
@@ -47,17 +49,19 @@ class FileResourceConfig(BaseFileResourceConfig):
 class FileResource(BaseFileResource):
     """Record file resource."""
 
-    def read_file_content(self):
+    def read_content(self):
         """Read file content and set proper Content-Disposition header."""
         # Get the response from the base class
-        response = super().read_file_content()
+        response = super().read_content()
 
-        # Get the file key from the request
-        file_key = self.resource_requestctx.route["key"]
+        # Get the file key from the request context
+        file_key = resource_requestctx.view_args["key"]
 
-        # Always set Content-Disposition header with the actual filename
-        # This ensures downloads use the correct filename instead of "contents"
-        # or generic names for non-PDF files
-        response.headers["Content-Disposition"] = f'attachment; filename="{file_key}"'
+        # Set RFC 6266 / RFC 5987 compliant Content-Disposition header:
+        # - filename: latin-1-safe fallback for legacy clients
+        # - filename*: UTF-8 encoded per RFC 5987 for full Unicode support
+        filename_latin1 = file_key.encode("latin-1", errors="replace").decode("latin-1")
+        filename_star = "UTF-8''" + quote(file_key, encoding="utf-8", safe="")
+        response.headers["Content-Disposition"] = f'attachment; filename="{filename_latin1}"; filename*={filename_star}'
 
         return response

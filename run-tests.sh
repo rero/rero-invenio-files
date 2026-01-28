@@ -83,6 +83,17 @@ info_msg "Check vulnerabilities:"
 add_exceptions "PYSEC-2022-42969"
 # urllib3 1.26.20 GHSA-pq67-6m6q-mj2v 2.5.0
 add_exceptions "GHSA-pq67-6m6q-mj2v"
+# nbconvert 7.16.6 CVE-2025-53000
+add_exceptions "CVE-2025-53000"
+# urllib3 1.26.20 is pinned to 1.x by invenio-* packages as a transitive
+# dependency. The three CVEs below affect urllib3 <2.6.0 (CVE-2025-66418,
+# CVE-2025-66471) and <2.6.3 (CVE-2026-21441). Blocked by upstream invenio-*
+# packages keeping a urllib3 1.x constraint. Remove these suppressions once
+# those packages upgrade their pin to urllib3 >=2.6.0 (CVE-2025-66418,
+# CVE-2025-66471) or >=2.6.3 (CVE-2026-21441).
+add_exceptions "CVE-2025-66418"
+add_exceptions "CVE-2025-66471"
+add_exceptions "CVE-2026-21441"
 pip-audit ${pip_audit_exceptions}
 
 info_msg "Test formatting:"
