@@ -56,10 +56,10 @@ class ThumbFileLink(PreviewFileLink):
 class RecordServiceConfig(BaseRecordServiceConfig):
     """Record service configuration.
 
-    Needs both configs, with File overwritting the record ones.
+    Needs both configs, with File overwriting the record ones.
     """
 
-    # permission policiy
+    # permission policy
     permission_policy_cls = PermissionPolicy
     # record class
     record_cls = RecordWithFile
