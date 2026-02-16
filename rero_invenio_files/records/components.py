@@ -41,7 +41,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         basename, ext = os.path.splitext(filename)
 
         if not basename:
-            raise Exception(f"{filename} is not a valid filename")
+            raise ValueError(f"{filename} is not a valid filename")
 
         if not ext:
             return f"{basename}.{extension}"

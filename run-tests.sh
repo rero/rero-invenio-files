@@ -16,7 +16,7 @@
 
 
 # Usage:
-#   env DB=postgresql15 SEARCH=elasticsearch7 CACHE=redis MQ=rabbitmq ./run-tests.sh
+#   env DB=postgresql15 SEARCH=opensearch2 CACHE=redis MQ=rabbitmq ./run-tests.sh
 
 # COLORS for messages
 NC='\033[0m'                    # Default color
@@ -78,16 +78,8 @@ add_exceptions() {
 # python -m check_manifest
 
 info_msg "Check vulnerabilities:"
-# urllib3 1.26.20 GHSA-pq67-6m6q-mj2v 2.5.0
-add_exceptions "GHSA-pq67-6m6q-mj2v"
-# urllib3 1.26.20 CVE-2025-66418 2.6.0
-add_exceptions "CVE-2025-66418"
-# urllib3 1.26.20 CVE-2025-66471 2.6.0
-add_exceptions "CVE-2025-66471"
-# urllib3 1.26.20 CVE-2026-21441 2.6.3
-add_exceptions "CVE-2026-21441"
-# pygments 2.19.2  CVE-2026-4539
-add_exceptions "CVE-2026-4539"
+# pytest 8.4.2   CVE-2025-71176 9.0.3
+add_exceptions "CVE-2025-71176"
 pip-audit ${pip_audit_exceptions}
 
 info_msg "Test formatting:"
@@ -96,7 +88,7 @@ info_msg "Test linting:"
 ruff check
 
 # TODO: Remove services below that are not neeed (fix also the usage note).
-docker-services-cli up --db ${DB:-postgresql} --search ${SEARCH:-elasticsearch} --cache ${CACHE:-redis} --mq ${MQ:-rabbitmq} --env
+docker-services-cli up --db ${DB:-postgresql} --search ${SEARCH:-opensearch2} --cache ${CACHE:-redis} --mq ${MQ:-rabbitmq} --env
 pytest
 tests_exit_code=$?
 exit "$tests_exit_code"
