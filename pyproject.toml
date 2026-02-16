@@ -11,7 +11,7 @@ requires-python = ">=3.14, <3.15"
 
 dependencies = [
     "invenio-records-resources>=9.0.0",
-    "invenio-search [elasticsearch7]>=3.0.0,<4.0.0",
+    "invenio-search [opensearch2]>=3.0.0,<4.0.0",
     "invenio-db [postgresql]>=2.0.0",
     "fpdf2",
     "pillow>=12.2.0",
@@ -19,6 +19,7 @@ dependencies = [
     "pymupdf<2.0",
     "invenio-previewer",
     "poethepoet>=0.36.0",
+
 ]
 
 [dependency-groups]

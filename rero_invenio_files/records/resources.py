@@ -21,7 +21,7 @@ class RecordResourceConfig(BaseRecordResourceConfig):
 
 
 class RecordResource(BaseRecordResource):
-    """Record resource"."""
+    """Record resource."""
 
 
 class FileResourceConfig(BaseFileResourceConfig):
