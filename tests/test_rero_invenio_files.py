@@ -307,6 +307,7 @@ def test_files_api_flow(app, client, headers, file_location, pdf_file):
         "preview",
         "thumbnail",
     }
+    assert res.json["links"]["thumbnail"].endswith(f"/api/records/{id_}/files/test-pdf.jpg/content")
 
     assert isinstance(res.json["size"], int), "File size not integer"
 
