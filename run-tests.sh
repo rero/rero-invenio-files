@@ -79,10 +79,14 @@ add_exceptions() {
 # sphinx-build -qnNW docs docs/_build/html
 
 info_msg "Check vulnerabilities:"
-# py 1.11.0  PYSEC-2022-42969
-add_exceptions "PYSEC-2022-42969"
 # urllib3 1.26.20 GHSA-pq67-6m6q-mj2v 2.5.0
 add_exceptions "GHSA-pq67-6m6q-mj2v"
+# urllib3 1.26.20 CVE-2025-66418 2.6.0
+add_exceptions "CVE-2025-66418"
+# urllib3 1.26.20 CVE-2025-66471 2.6.0
+add_exceptions "CVE-2025-66471"
+# urllib3 1.26.20 CVE-2026-21441 2.6.3
+add_exceptions "CVE-2026-21441"
 pip-audit ${pip_audit_exceptions}
 
 info_msg "Test formatting:"
