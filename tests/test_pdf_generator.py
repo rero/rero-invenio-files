@@ -27,7 +27,7 @@ def test_pdf_generation(simple_data):
     pdf = PDFGenerator(simple_data)
     pdf.render()
     assert pdf.pages_count == 1
-    output = pdf.output(dest="S")
+    output = pdf.output()
     assert isinstance(output, (bytes, bytearray))
     assert len(output) > 100
 
@@ -37,7 +37,7 @@ def test_pdf_generation_empty():
     pdf = PDFGenerator({})
     pdf.render()
     assert pdf.pages_count == 1
-    output = pdf.output(dest="S")
+    output = pdf.output()
     assert isinstance(output, (bytes, bytearray))
     assert len(output) > 100
 
@@ -55,7 +55,7 @@ def test_header_footer_called(simple_data):
         "footer",
     ) as mock_footer:
         assert not mock_footer.called
-        pdf.output(dest="S")
+        pdf.output()
         assert mock_footer.called
 
 
