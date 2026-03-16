@@ -23,7 +23,7 @@ from invenio_records_resources.services import RecordService as BaseRecordServic
 from invenio_records_resources.services import (
     RecordServiceConfig as BaseRecordServiceConfig,
 )
-from invenio_records_resources.services.files.links import FileLink
+from invenio_records_resources.services.base import ExternalLink
 from invenio_records_resources.services.records.components import FilesComponent
 from invenio_records_resources.services.records.links import RecordEndpointLink
 
@@ -33,7 +33,16 @@ from .permissions import PermissionPolicy
 from .schema import RecordSchema
 
 
-class PreviewFileLink(FileLink):
+class FileExternalLink(ExternalLink):
+    """Non-deprecated replacement for FileLink with file key variable."""
+
+    @staticmethod
+    def vars(file_record, variables):
+        """Variables for the URI template."""
+        variables.update({"key": file_record.key})
+
+
+class PreviewFileLink(FileExternalLink):
     """Add the preview link only for some document type."""
 
     def should_render(self, obj, ctx):
@@ -83,9 +92,9 @@ class FileServiceConfig(BaseFileServiceConfig):
     record_cls = RecordWithFile
     # API links
     file_links_item = {
-        "self": FileLink("{+api}/records/{id}/files/{+key}"),
-        "content": FileLink("{+api}/records/{id}/files/{+key}/content"),
-        "commit": FileLink("{+api}/records/{id}/files/{+key}/commit"),
+        "self": FileExternalLink("{+api}/records/{id}/files/{+key}"),
+        "content": FileExternalLink("{+api}/records/{id}/files/{+key}/content"),
+        "commit": FileExternalLink("{+api}/records/{id}/files/{+key}/commit"),
         "preview": PreviewFileLink("{+ui}/records/preview/{id}/{+key}"),
         "thumbnail": ThumbFileLink("{+api}/records/{id}/files/{+thumb}/content"),
     }
