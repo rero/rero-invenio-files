@@ -76,7 +76,6 @@ add_exceptions() {
 }
 
 # python -m check_manifest
-# sphinx-build -qnNW docs docs/_build/html
 
 info_msg "Check vulnerabilities:"
 # urllib3 1.26.20 GHSA-pq67-6m6q-mj2v 2.5.0
