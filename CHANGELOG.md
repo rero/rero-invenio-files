@@ -1,5 +1,14 @@
 # Changelog
 
+## [v2.0.0](https://github.com/rero/rero-invenio-files/tree/v2.0.0) (2026-03-24)
+
+[Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.2.0...v2.0.0)
+
+**Changes:**
+
+- chore: remove unused Invenio default files and Sphinx infrastructure [#18](https://github.com/rero/rero-invenio-files/pull/18) (by @PascalRepond)
+- BREAKING CHANGE: upgrade invenio-records-resources to v9 [#17](https://github.com/rero/rero-invenio-files/pull/17) (by @PascalRepond)
+
 ## [v1.2.0](https://github.com/rero/rero-invenio-files/tree/v1.2.0) (2025-09-02)
 
 [Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.1.3...v1.2.0)

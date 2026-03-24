@@ -1,12 +1,12 @@
 [project]
 name = "rero-invenio-files"
-version = "1.2.0"
+version = "2.0.0"
 description = "Files support for the RERO invenio instances."
 authors = [{name = "RERO",email = "software@rero.ch"}]
 license = "AGPL-3.0-or-later"
 license-files = ["LICENSE"]
 readme = "README.md"
-requires-python = ">=3.9.2, <3.13"
+requires-python = ">=3.10, <3.15.0"
 
 
 dependencies = [
@@ -16,7 +16,6 @@ dependencies = [
     "fpdf2",
     "pymupdf",
     "invenio-previewer",
-    "invenio-theme",
     "poethepoet>=0.36.0",
 ]
 

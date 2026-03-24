@@ -86,6 +86,8 @@ add_exceptions "CVE-2025-66418"
 add_exceptions "CVE-2025-66471"
 # urllib3 1.26.20 CVE-2026-21441 2.6.3
 add_exceptions "CVE-2026-21441"
+# pygments 2.19.2  CVE-2026-4539
+add_exceptions "CVE-2026-4539"
 pip-audit ${pip_audit_exceptions}
 
 info_msg "Test formatting:"
