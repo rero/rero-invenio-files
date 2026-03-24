@@ -77,8 +77,8 @@ tests = {cmd = "pytest", help = "pytest"}
 tests_debug = {cmd = "pytest -s -vv --no-cov", help = "pytest -s -vv --no-cov"}
 
 [tool.pytest.ini_options]
-addopts = "--color=yes --doctest-glob=\"*.rst\" --doctest-modules --cov=rero_invenio_files --cov-report=term-missing"
-testpaths = "docs tests rero_invenio_files"
+addopts = "--color=yes --doctest-modules --cov=rero_invenio_files --cov-report=term-missing"
+testpaths = "tests rero_invenio_files"
 # not displaying all the PendingDeprecationWarnings from invenio
 filterwarnings = "ignore::PendingDeprecationWarning"
 

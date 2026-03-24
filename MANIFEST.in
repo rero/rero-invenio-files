@@ -23,6 +23,5 @@
 
 include .dockerignore
 include .editorconfig
-prune docs/_build
 recursive-include .github/workflows *.yml
 recursive-include rero_invenio_files/translations *.po *.pot *.mo
