@@ -60,7 +60,7 @@ class ThumbFileLink(PreviewFileLink):
     """Add the thumbnail file name variable to generate the thumbnail links."""
 
     @staticmethod
-    def vars(file_record, variables):
+    def variables(file_record, variables):
         """Variables for the URI template."""
         variables.update({"thumb": ThumbnailAndFulltextComponent.change_filename_extension(file_record.key, "jpg")})
 
@@ -68,10 +68,10 @@ class ThumbFileLink(PreviewFileLink):
 class RecordServiceConfig(BaseRecordServiceConfig):
     """Record service configuration.
 
-    Needs both configs, with File overwritting the record ones.
+    Needs both configs, with File overwriting the record ones.
     """
 
-    # permission policiy
+    # permission policy
     permission_policy_cls = PermissionPolicy
     # record class
     record_cls = RecordWithFile
