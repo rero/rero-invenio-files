@@ -86,6 +86,10 @@ add_exceptions "CVE-2025-66418"
 add_exceptions "CVE-2025-66471"
 # urllib3 1.26.20 CVE-2026-21441 2.6.3
 add_exceptions "CVE-2026-21441"
+# urllib3 1.26.20 PYSEC-2026-141 2.7.0
+add_exceptions "PYSEC-2026-141"
+# pytest 8.x CVE-2025-71176 9.0.3 - blocked by pytest-invenio<9.0.0 cap
+add_exceptions "CVE-2025-71176"
 # pygments 2.19.2  CVE-2026-4539
 add_exceptions "CVE-2026-4539"
 pip-audit ${pip_audit_exceptions}
