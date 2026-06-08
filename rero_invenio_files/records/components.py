@@ -17,15 +17,16 @@
 
 import contextlib
 import os
+import unicodedata
 from io import BytesIO
 
 import fitz
+from flask import current_app
 from invenio_records_resources.services.errors import FileKeyNotFoundError
 from invenio_records_resources.services.files.components.base import (
     FileServiceComponent,
 )
-from wand.color import Color
-from wand.image import Image
+from PIL import Image
 
 
 class ThumbnailAndFulltextComponent(FileServiceComponent):
@@ -63,24 +64,32 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
 
         # For PDF, we take only the first page
         if mimetype == "application/pdf":
-            # Append [0] force to take only the first page
-            # file_path = file_path + "[0]"
             max_width = max_height = 200
             with fitz.open(file_path) as pdf_document:
                 page = pdf_document[0]
                 scale_factor = min(max_width / page.rect.width, max_height / page.rect.height)
-                pixmap = page.get_pixmap(matrix=fitz.Matrix(scale_factor, scale_factor))
-                return pixmap.tobytes(output="jpg", jpg_quality=95)
+                # alpha=False avoids allocating an unused alpha channel
+                pixmap = page.get_pixmap(matrix=fitz.Matrix(scale_factor, scale_factor), alpha=False)
+                return pixmap.tobytes(output="jpg", jpg_quality=85)
 
         else:
-            # Create the image thumbnail
-            with Image(filename=file_path) as img:
-                img.format = "jpg"
-                img.background_color = Color("white")
-                img.alpha_channel = "remove"
-                img.transform(resize="200x")
-
-                return img.make_blob()
+            with Image.open(file_path) as img:
+                # For palette images, convert before resizing to preserve transparency
+                if img.mode == "P":
+                    img = img.convert("RGBA")
+                # Hint JPEG decoder to subsample during decode (1/2, 1/4, or 1/8)
+                img.draft(None, (200, 200))
+                # Resize first — color conversion then runs on 200px, not the original
+                img.thumbnail((200, 200))
+                if img.mode in ("RGBA", "LA"):
+                    background = Image.new("RGB", img.size, (255, 255, 255))
+                    background.paste(img, mask=img.split()[-1])
+                    img = background
+                else:
+                    img = img.convert("RGB")
+                buf = BytesIO()
+                img.save(buf, format="JPEG", quality=85)
+                return buf.getvalue()
 
     @staticmethod
     def create_fulltext_from_file(file_path, mimetype):
@@ -93,9 +102,15 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         """
         if mimetype != "application/pdf":
             return None
+        flags = fitz.TEXTFLAGS_TEXT | fitz.TEXT_DEHYPHENATE
         with fitz.open(file_path) as pdf_file:
-            text = [page.get_text("text") for page in pdf_file]
-            return "\n".join(text)
+            if pdf_file.is_encrypted:
+                return None
+            pages = (
+                unicodedata.normalize("NFKC", page.get_text("text", flags=flags, sort=True)).strip()
+                for page in pdf_file
+            )
+            return "\n".join(t for t in pages if t) or None
 
     def commit_file(self, identity, id_, file_key, record):
         """Commit file handler.
@@ -112,7 +127,7 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         sf = self.service
         recid = record.pid.pid_value
         # thumbnail
-        with contextlib.suppress(Exception):
+        try:
             if blob := self.create_thumbnail_from_file(rfile.uri, rfile.mimetype):
                 thumb_name = self.change_filename_extension(file_key, "jpg")
                 sf.init_files(
@@ -137,8 +152,10 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
                     uow=self.uow,
                 )
                 sf.commit_file(identity=identity, id_=recid, file_key=thumb_name, uow=self.uow)
+        except Exception:
+            current_app.logger.debug("Thumbnail generation failed for %s", file_key, exc_info=True)
         # fulltext
-        with contextlib.suppress(Exception):
+        try:
             if fulltext := self.create_fulltext_from_file(rfile.uri, rfile.mimetype):
                 thumb_name = self.change_filename_extension(file_key, "txt")
                 sf.init_files(
@@ -163,6 +180,8 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
                     uow=self.uow,
                 )
                 sf.commit_file(identity=identity, id_=recid, file_key=thumb_name, uow=self.uow)
+        except Exception:
+            current_app.logger.debug("Fulltext extraction failed for %s", file_key, exc_info=True)
 
     def delete_file(self, identity, id_, file_key, record, deleted_file):
         """Delete file handler.
