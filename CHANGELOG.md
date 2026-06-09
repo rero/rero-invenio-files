@@ -1,5 +1,7 @@
 # Changelog
 
+<!-- version list -->
+
 ## [v2.0.0](https://github.com/rero/rero-invenio-files/tree/v2.0.0) (2026-03-24)
 
 [Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.2.0...v2.0.0)

@@ -92,6 +92,10 @@ add_exceptions "PYSEC-2026-141"
 add_exceptions "CVE-2025-71176"
 # pygments 2.19.2  CVE-2026-4539
 add_exceptions "CVE-2026-4539"
+# pytest  8.4.2   CVE-2025-71176 9.0.3
+add_exceptions "CVE-2025-71176"
+# urllib3 1.26.20 PYSEC-2026-141 2.7.0
+add_exceptions "PYSEC-2026-141"
 pip-audit ${pip_audit_exceptions}
 
 info_msg "Test formatting:"
