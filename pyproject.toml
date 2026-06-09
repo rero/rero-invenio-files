@@ -6,13 +6,13 @@ authors = [{name = "RERO",email = "software@rero.ch"}]
 license = "AGPL-3.0-or-later"
 license-files = ["LICENSE"]
 readme = "README.md"
-requires-python = ">=3.10, <3.15.0"
+requires-python = ">=3.12, <3.15"
 
 
 dependencies = [
-    "invenio-records-resources (>=9.0.0)",
-    "invenio-search [elasticsearch7] (>=3.0.0,<4.0.0)",
-    "invenio-db [postgresql] (>=2.0.0,<3.0.0)",
+    "invenio-records-resources>=9.0.0",
+    "invenio-search [elasticsearch7]>=3.0.0,<4.0.0",
+    "invenio-db [postgresql]>=2.0.0",
     "fpdf2",
     "pillow>=12.2.0",
     "pymupdf",
@@ -22,11 +22,12 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "invenio-app (>=3.0.0)",
-    "pytest-invenio (>=3.0.0)",
+    "invenio-app>=3.0.0",
+    "pytest-invenio>=3.0.0",
     "mock>=2.0.0",
-    "pip-audit (>=2.8.0)",
+    "pip-audit>=2.8.0",
     "ruff>=0.12.3",
+    "python-semantic-release>=10.5.3",
 ]
 
 [project.entry-points."invenio_base.apps"]
@@ -76,6 +77,19 @@ lint = {cmd = "ruff check", help = "Checks linting"}
 tests = {cmd = "pytest", help = "pytest"}
 tests_debug = {cmd = "pytest -s -vv --no-cov", help = "pytest -s -vv --no-cov"}
 
+# Release management
+[tool.poe.tasks.changelog]
+cmd = "semantic-release changelog"
+help = "Preview the next changelog without making changes"
+
+[tool.poe.tasks.version]
+cmd = "semantic-release version --print"
+help = "Print the next version number without making changes"
+
+[tool.poe.tasks.release]
+cmd = "semantic-release version --no-push --no-tag --no-commit"
+help = "Generate changelog and bump version locally (does not push, tag, or commit - for local testing only)"
+
 [tool.pytest.ini_options]
 addopts = "--color=yes --doctest-modules --cov=rero_invenio_files --cov-report=term-missing"
 testpaths = "tests rero_invenio_files"
@@ -83,7 +97,7 @@ testpaths = "tests rero_invenio_files"
 filterwarnings = "ignore::PendingDeprecationWarning"
 
 [build-system]
-requires = ["uv_build"]
+requires = ["uv_build<1.0.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
@@ -91,3 +105,31 @@ module-root = "."
 
 [tool.uv]
 package = true
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+tag_format = "v{version}"
+commit_message = "chore(release): v{version}"
+build_command = """
+    uv lock --upgrade-package rero-invenio-files
+    git add uv.lock
+"""
+
+[tool.semantic_release.commit_author]
+env = "GIT_COMMIT_AUTHOR"
+default = "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore"]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf", "chore", "docs", "style", "refactor", "test", "build", "ci"]
+
+[tool.semantic_release.changelog]
+exclude_commit_patterns = [
+    "chore\\(release\\):.*",
+]
+mode = "update"
+
+[tool.semantic_release.branches.staging]
+match = "staging"
+prerelease = false
