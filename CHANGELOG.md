@@ -2,6 +2,27 @@
 
 <!-- version list -->
 
+## v2.0.1 (2026-06-16)
+
+### Code Style
+
+- Replace verbose license headers with SPDX tags
+  ([`7397b4a`](https://github.com/rero/rero-invenio-files/commit/7397b4ad7d4d44ddf0ed51dd6e244a54a565b37e))
+
+### Continuous Integration
+
+- Add semantic release workflow for automatic publication
+  ([`5985719`](https://github.com/rero/rero-invenio-files/commit/5985719915c315298148021433af4cd34b5b03a0))
+
+- Switch to github app permissions for release workflow
+  ([`46bdb20`](https://github.com/rero/rero-invenio-files/commit/46bdb20b88abee4dff188a234dd48f10d142b580))
+
+### Refactoring
+
+- **files**: Replace ImageMagick with Pillow, optimize extraction
+  ([`30a35de`](https://github.com/rero/rero-invenio-files/commit/30a35deb1d69a13fb4cc4c7f46b14bedce78d5a3))
+
+
 ## [v2.0.0](https://github.com/rero/rero-invenio-files/tree/v2.0.0) (2026-03-24)
 
 [Full Changelog](https://github.com/rero/rero-invenio-files/compare/v1.2.0...v2.0.0)
