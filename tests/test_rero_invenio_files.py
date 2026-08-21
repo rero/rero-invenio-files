@@ -6,7 +6,7 @@
 from io import BytesIO
 from unittest import mock
 
-import fitz
+import pymupdf
 from flask import Flask
 from PIL import Image
 
@@ -54,7 +54,7 @@ def test_thumbnail_unsupported_mimetype():
 def test_thumbnail_pdf(tmp_path):
     """PDF thumbnail is a valid JPEG at most 200px on either dimension."""
     pdf_path = tmp_path / "sample.pdf"
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=595, height=842)  # A4
     page.insert_text((72, 72), "Test PDF thumbnail")
     doc.save(str(pdf_path))
@@ -156,7 +156,7 @@ def test_fulltext_unsupported_mimetype():
 def test_fulltext_pdf(tmp_path):
     """PDF with extractable text returns the text content."""
     pdf_path = tmp_path / "sample.pdf"
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page()
     page.insert_text((72, 72), "Hello World")
     doc.save(str(pdf_path))
@@ -171,7 +171,7 @@ def test_fulltext_pdf(tmp_path):
 def test_fulltext_empty_pdf_returns_none(tmp_path):
     """PDF with no text on any page returns None."""
     pdf_path = tmp_path / "empty.pdf"
-    doc = fitz.open()
+    doc = pymupdf.open()
     doc.new_page()
     doc.save(str(pdf_path))
     doc.close()
@@ -184,10 +184,10 @@ def test_fulltext_empty_pdf_returns_none(tmp_path):
 def test_fulltext_encrypted_pdf_returns_none(tmp_path):
     """Encrypted PDF returns None without raising."""
     pdf_path = tmp_path / "encrypted.pdf"
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page()
     page.insert_text((72, 72), "Secret content")
-    doc.save(str(pdf_path), encryption=fitz.PDF_ENCRYPT_AES_256, user_pw="secret")
+    doc.save(str(pdf_path), encryption=pymupdf.PDF_ENCRYPT_AES_256, user_pw="secret")
     doc.close()
 
     result = ThumbnailAndFulltextComponent.create_fulltext_from_file(str(pdf_path), "application/pdf")
@@ -205,7 +205,7 @@ def test_fulltext_ligatures_normalised():
     mock_doc.is_encrypted = False
     mock_doc.__iter__ = mock.MagicMock(return_value=iter([mock_page]))
 
-    with mock.patch("fitz.open", return_value=mock_doc):
+    with mock.patch("pymupdf.open", return_value=mock_doc):
         result = ThumbnailAndFulltextComponent.create_fulltext_from_file("dummy.pdf", "application/pdf")
 
     assert result == "find flow"
