@@ -7,6 +7,7 @@ from io import BytesIO
 from unittest import mock
 
 import pymupdf
+import pytest
 from flask import Flask
 from PIL import Image
 
@@ -38,6 +39,24 @@ def _jpeg_size(data):
     """Return (width, height) of a JPEG blob."""
     with Image.open(BytesIO(data)) as img:
         return img.size
+
+
+# ---------------------------------------------------------------------------
+# change_filename_extension unit tests
+# ---------------------------------------------------------------------------
+
+
+def test_change_filename_extension():
+    """Original extension is kept in the derived filename."""
+    change = ThumbnailAndFulltextComponent.change_filename_extension
+    assert change("test.pdf", "jpg") == "test-pdf.jpg"
+    assert change("test", "txt") == "test.txt"
+
+
+def test_change_filename_extension_invalid_filename():
+    """An empty filename is rejected."""
+    with pytest.raises(ValueError, match="not a valid filename"):
+        ThumbnailAndFulltextComponent.change_filename_extension("", "jpg")
 
 
 # ---------------------------------------------------------------------------
