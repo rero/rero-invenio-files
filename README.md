@@ -49,7 +49,7 @@ including the development tools. If you need a specific Python version, `uv` can
 provide it:
 
 ```console
-uv python install 3.12
+uv python install 3.14
 ```
 
 ### Testing
