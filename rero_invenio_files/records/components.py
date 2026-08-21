@@ -8,7 +8,7 @@ import os
 import unicodedata
 from io import BytesIO
 
-import fitz
+import pymupdf
 from flask import current_app
 from invenio_records_resources.services.errors import FileKeyNotFoundError
 from invenio_records_resources.services.files.components.base import (
@@ -53,11 +53,11 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         # For PDF, we take only the first page
         if mimetype == "application/pdf":
             max_width = max_height = 200
-            with fitz.open(file_path) as pdf_document:
+            with pymupdf.open(file_path) as pdf_document:
                 page = pdf_document[0]
                 scale_factor = min(max_width / page.rect.width, max_height / page.rect.height)
                 # alpha=False avoids allocating an unused alpha channel
-                pixmap = page.get_pixmap(matrix=fitz.Matrix(scale_factor, scale_factor), alpha=False)
+                pixmap = page.get_pixmap(matrix=pymupdf.Matrix(scale_factor, scale_factor), alpha=False)
                 return pixmap.tobytes(output="jpg", jpg_quality=85)
 
         else:
@@ -90,8 +90,8 @@ class ThumbnailAndFulltextComponent(FileServiceComponent):
         """
         if mimetype != "application/pdf":
             return None
-        flags = fitz.TEXTFLAGS_TEXT | fitz.TEXT_DEHYPHENATE
-        with fitz.open(file_path) as pdf_file:
+        flags = pymupdf.TEXTFLAGS_TEXT | pymupdf.TEXT_DEHYPHENATE
+        with pymupdf.open(file_path) as pdf_file:
             if pdf_file.is_encrypted:
                 return None
             pages = (
