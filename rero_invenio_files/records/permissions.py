@@ -22,5 +22,6 @@ class PermissionPolicy(RecordPermissionPolicy):
     can_read_files = [AnyUser(), SystemProcess()]
     can_create_files = [SystemProcess()]
     can_commit_files = [SystemProcess()]
+    can_extract_file_metadata = [SystemProcess()]
     can_update_files = [SystemProcess()]
     can_delete_files = [SystemProcess()]
