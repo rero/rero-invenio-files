@@ -9,10 +9,13 @@ from unittest import mock
 import pymupdf
 import pytest
 from flask import Flask
+from flask_principal import AnonymousIdentity
+from invenio_access.permissions import system_identity
 from PIL import Image
 
 from rero_invenio_files import REROInvenioFiles
 from rero_invenio_files.records.components import ThumbnailAndFulltextComponent
+from rero_invenio_files.records.permissions import PermissionPolicy
 
 
 def test_version():
@@ -360,3 +363,50 @@ def test_files_api_flow(app, client, headers, file_location, pdf_file):
     res = client.get(f"/api/records/{id_}/files", headers=headers)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 0
+
+
+def test_extract_file_metadata_permission(app):
+    """Only the system process may extract the metadata of a file.
+
+    The extraction runs from a task under the system identity once a file is
+    committed, and it is the only thing that writes the metadata entry of the
+    file. An action the policy does not know about falls back to `Disable()`,
+    which denies the task.
+    """
+    permission = PermissionPolicy("extract_file_metadata")
+    assert permission.allows(system_identity)
+    assert not permission.allows(AnonymousIdentity())
+
+
+def test_file_metadata_is_extracted(app, client, headers, file_location):
+    """A committed file ends up with a metadata entry.
+
+    The entry is written by the `extract_file_metadata` task. The task logs its
+    own errors instead of raising, so a denied permission leaves every file
+    without metadata without anything failing.
+    """
+    res = client.post("/api/records", headers=headers, json={"metadata": {}})
+    assert res.status_code == 201
+    id_ = res.json["id"]
+
+    # a file initialized without metadata carries no entry yet
+    res = client.post(f"/api/records/{id_}/files", headers=headers, json=[{"key": "test.txt"}])
+    assert res.status_code == 201
+    assert res.json["entries"][0].get("metadata") is None
+
+    res = client.put(
+        f"/api/records/{id_}/files/test.txt/content",
+        headers={
+            "content-type": "application/octet-stream",
+            "accept": "application/json",
+        },
+        data=BytesIO(b"Some content"),
+    )
+    assert res.status_code == 200
+
+    res = client.post(f"/api/records/{id_}/files/test.txt/commit", headers=headers)
+    assert res.status_code == 200
+
+    res = client.get(f"/api/records/{id_}/files/test.txt", headers=headers)
+    assert res.status_code == 200
+    assert res.json["metadata"] == {}
