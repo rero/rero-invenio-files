@@ -2,6 +2,37 @@
 
 <!-- version list -->
 
+## v2.0.2 (2026-09-07)
+
+### Bug Fixes
+
+- Add new can_extract_metadata permission
+  ([`032820f`](https://github.com/rero/rero-invenio-files/commit/032820f0df1d2e51dfdb4821c6aa61812f175394))
+
+- **files**: Raise ValueError on invalid filename
+  ([`9656d03`](https://github.com/rero/rero-invenio-files/commit/9656d0351119e2ec054fc5721eb6778af9e64018))
+
+### Build System
+
+- **deps**: Run python-semantic-release through uvx
+  ([`711a949`](https://github.com/rero/rero-invenio-files/commit/711a9496023cdb00512c6cd9cb6b7e8c5f6a07f1))
+
+### Chores
+
+- **deps**: Require python 3.14 and bump ci actions
+  ([`2a112d4`](https://github.com/rero/rero-invenio-files/commit/2a112d49eaac6fcdaa007c6874a1981dd5ecd58c))
+
+### Documentation
+
+- Add claude code guide
+  ([`5545948`](https://github.com/rero/rero-invenio-files/commit/5545948202a8bb5e79318b38e26274b890c1b328))
+
+### Refactoring
+
+- **files**: Use the pymupdf module name
+  ([`87f3a0f`](https://github.com/rero/rero-invenio-files/commit/87f3a0f4b3b746c200a3209695e838c49c58fb95))
+
+
 ## v2.0.1 (2026-06-16)
 
 ### Code Style
