@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v2.0.3 (2026-10-27)
+
+### Build System
+
+- **deps**: Update vulnerable dependencies
+  ([`ffa5987`](https://github.com/rero/rero-invenio-files/commit/ffa5987afe6f3ca62cd4088e93504db5558d282d))
+
+### Documentation
+
+- Enhance Claude commit and review capabilities
+  ([`75690e7`](https://github.com/rero/rero-invenio-files/commit/75690e72e55811dc2e9e79d752470ed7e3504e6d))
+
+
 ## v2.0.2 (2026-09-07)
 
 ### Bug Fixes
