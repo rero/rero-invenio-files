@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v3.0.0 (2026-11-17)
+
+### Chores
+
+- Update dependencies
+  ([`710ba1b`](https://github.com/rero/rero-invenio-files/commit/710ba1bd2d961471fc121d7527e16b0ad4f74447))
+
+### Continuous Integration
+
+- Split dev and deploy tests
+  ([`25c07aa`](https://github.com/rero/rero-invenio-files/commit/25c07aab297fd89a9760bba566e91bc41c627b48))
+
+### Features
+
+- **search**: Migrate to OpenSearch 2
+  ([`6ce1913`](https://github.com/rero/rero-invenio-files/commit/6ce191319ef924403951ec70e00d502c0b1b6146))
+
+
 ## v2.0.3 (2026-10-27)
 
 ### Build System
